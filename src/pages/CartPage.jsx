@@ -1,45 +1,49 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, changeQuantity } from "../redux/cartSlice";
-import "./CartPage.css";
+import { useSelector, useDispatch } from "react-redux";
+import { updateQuantity, removeFromCart } from "../redux/cartSlice";
+import "../styles/CartPage.css";
 
 const CartPage = () => {
+  const { items, subtotal, tax, total } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const { items, subTotal, tax, totalAmount } = useSelector(
-    (state) => state.cart
-  );
 
   const handleQuantityChange = (id, quantity) => {
-    dispatch(changeQuantity({ id, quantity }));
+    dispatch(updateQuantity({ id, quantity }));
   };
 
   return (
-    <div className="cart-page">
-      <h2>Your Cart</h2>
-      {items.map((item) => (
-        <div key={item.id} className="cart-item">
-          <img src={item.thumbnail} alt={item.title} />
-          <div>
-            <h4>{item.title}</h4>
-            <p>Price: ${item.price}</p>
-            <input
-              type="number"
-              value={item.quantity}
-              onChange={(e) =>
-                handleQuantityChange(item.id, Number(e.target.value))
-              }
-              min="1"
-            />
-            <button onClick={() => dispatch(removeFromCart(item.id))}>
-              Remove
-            </button>
-          </div>
+    <div className="container">
+      <div className="cart-page">
+        <h1>Your Cart</h1>
+        <div className="cart-items">
+          {items.map((item) => (
+            <div key={item.id} className="cart-item">
+              <h2>{item.title}</h2>
+              <p>Price: ${item.price}</p>
+              <input
+                type="number"
+                value={item.quantity}
+                onChange={(e) =>
+                  handleQuantityChange(item.id, parseInt(e.target.value))
+                }
+              />
+              <button onClick={() => dispatch(removeFromCart(item.id))}>
+                Remove
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
-      <div className="cart-summary">
-        <p>Subtotal: ${subTotal.toFixed(2)}</p>
-        <p>Tax (12%): ${tax.toFixed(2)}</p>
-        <h3>Total: ${totalAmount.toFixed(2)}</h3>
+        <div className="cart-summary">
+          <p>
+            Subtotal: <strong>${subtotal.toFixed(2)}</strong>
+          </p>
+          <p>
+            Tax (12%): <strong>${tax.toFixed(2)}</strong>
+          </p>
+          <p>
+            Total: <strong>${total.toFixed(2)}</strong>
+          </p>
+        </div>
       </div>
     </div>
   );

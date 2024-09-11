@@ -1,14 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ProductList from "./pages/ProductList";
+import Home from "./pages/Home";
 import CartPage from "./pages/CartPage";
-import "./App.css";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<ProductList />} />
+        <Route path="/" element={<Home />} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>
     </Router>
